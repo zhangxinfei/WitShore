@@ -4,11 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="witstore.DAO.UserDAO">
 
-    <insert id="insertNewUser">
+    <insert id="insertNewUser" parameterType="witstore.domain.User">
         INSERT INTO users (userId,openId,nickName,gender,city,province,country,avatarUrl)
         VALUE (#{userId},#{openId},#{nickName},#{gender},#{city},#{province},#{country},#{avatarUrl})
     </insert>
-    <select id="getUserByOpenId" resultType="witstore.domain.User">
+
+    <select id="getUserByOpenId" resultType="witstore.domain.User" parameterType="String">
         SELECT * FROM users WHERE openId=#{openId}
     </select>
 

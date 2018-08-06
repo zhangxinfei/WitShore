@@ -62,9 +62,6 @@ public class UserController {
         String openId= Tools.encryption(WO.getOpenid());
         User user=userService.getUserByOpenId(openId);
         if (user!=null){
-
-
-
             //已存在该用户,向session域当中添加user对象
             HttpSession session=request.getSession();
             session.setAttribute("user",user);
