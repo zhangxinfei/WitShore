@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="witstore.DAO.MaterialDAO">
+
+    <resultMap id="myType" type="witstore.domain.Type">
+        <id column="typeId" property="typeId"/>
+        <result column="userId" property="userId"/>
+        <result column="typeDesc" property="typeDesc"/>
+        <result column="isUsing" property="isUsing"/>
+        <collection property="materials"
+                    select="witstore.DAO.MaterialDAO.getMaterialsByTypeId_Sept"
+                    column="typeId"/>
+    </resultMap>
+<!--/////////////////////////////////////////////////Insert/////////////////////////////////////////////////-->
+    <!--添加新仓库-->
+    <insert id="insertNewWarehouse">
+        INSERT INTO warehouse
+         (userId, warehouseName, country, imgUrl, saleVolume, province, district, city, detailAdd)
+         VALUES
+         (#{userId},#{warehouseName},#{country},#{imgUrl},#{saleVolume},#{province},#{district},#{city},#{detailAdd})
+    </insert>
+
+    <!--添加物料信息-->
+    <insert id="insertNewMaterial">
+        INSERT INTO material
+        (userId, typeId, warehouseId, matName, matImgUrl, amount, purchPrice)
+        VALUES
+        (#{userId},#{typeId},#{warehouseId},#{matName},#{matImgUrl},#{amount},#{purchPrice})
+    </insert>
+
+    <!--添加类别信息-->
+    <insert id="insertNewType">
+        INSERT INTO typeinfo
+        (userId, typeDesc)
+        VALUES (#{userId},#{typeDesc})
+    </insert>
+
+
+    <!--/////////////////////////////////////////////////Update/////////////////////////////////////////////////-->
+    <!--更新物料信息-->
+    <update id="updateMaterial">
+        UPDATE material SET
+        typeId=#{typeId},matName=#{matName},matImgUrl=#{matImgUrl},amount=#{amount},purchPrice=#{purchPrice}
+        WHERE matId=#{matId}
+    </update>
+
+    <!--更新仓库信息-->
+    <update id="updateWarehouse">
+        UPDATE warehouse SET
+        warehouseName=#{warehouseName},country=#{country},imgUrl=#{imgUrl},province=#{province},district=#{district},city=#{city},detailAdd=#{detailAdd}
+        WHERE warehouseId=#{warehouseId}
+    </update>
+
+    <!--更新类别信息-->
+    <update id="updateType">
+        UPDATE typeinfo SET typeDesc=#{typeDesc} WHERE warehouseId=#{warehouseId}
+    </update>
+
+    <!--/////////////////////////////////////////////////Delete/////////////////////////////////////////////////-->
+    <!--删除仓库-->
+    <update id="deleteWarehouseByWarehouseId">
+        UPDATE warehouse SET isUsing=0 WHERE warehouseId=#{warehouseId}
+    </update>
+
+    <!--删除物料-->
+    <update id="deleteMaterialByMaterialId">
+        UPDATE material SET isUsing=0 WHERE material=#{material}
+    </update>
+
+    <!--删除类别-->
+    <update id="deleteTypeByTypeId">
+        UPDATE typeinfo SET isUsing=0 WHERE typeId=#{typeId}
+    </update>
+
+    <update id="deleteMaterialByWarehouseId">
+        UPDATE material SET isUsing=0 WHERE warehouseId=#{warehouseId}
+    </update>
+
+    <!--//////////////////////////////////////////////////Select/////////////////////////////////////////////////-->
+   <!--查询仓库基本信息-->
+    <select id="getWarehouseDetail" resultType="witstore.domain.WareHouse">
+        SELECT * FROM warehouse WHERE warehouseId=#{warehouseId} AND isUsing=1
+    </select>
+
+    <!--查询物料基本信息-->
+    <select id="getMaterialDetail" resultType="witstore.domain.Material">
+        SELECT  * FROM material WHERE matId=#{matId} AND isUsing=1
+    </select>
+
+    <!--获取数量对应仓库-->
+    <select id="warehouse_MatCount" resultType="java.util.HashMap">
+        SELECT amount,warehouseName FROM material m,warehouse w WHERE matName LIKE #{matName} AND m.warehouseId=w.warehouseId AND m.userId=#{userId}
+    </select>
+
+    <!--获取所有物料信息,按类别分类-->
+    <select id="getTypes_MaterialsByUserId" resultMap="myType">
+        SELECT * FROM typeinfo WHERE userId=#{userId} AND isUsing=1
+    </select>
+    <!--分步查询物料-->
+    <select id="getMaterialsByTypeId_Sept" resultType="witstore.domain.Material">
+        SELECT matId,userId,typeId,warehouseId,matName,matImgUrl,SUM(amount) amount,purchPrice,isUsing FROM material WHERE typeId=#{typeId} AND isUsing=1 GROUP BY matName
+    </select>
+
+    <!--获取所有类别信息集合-->
+    <select id="getTypesByUserId" resultType="witstore.domain.Type">
+        SELECT * FROM typeinfo WHERE userId=#{userId}
+    </select>
+</mapper>

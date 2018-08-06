@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="witstore.DAO.ProductDAO">
+
+    <resultMap id="myProduct" type="witstore.domain.Product">
+        <id column="prodId" property="prodId"/>
+        <result column="warehouseId" property="warehouseId"/>
+        <result column="userId" property="userId"/>
+        <result column="prodName" property="prodName"/>
+        <result column="prodPrice" property="prodPrice"/>
+        <result column="isUsing" property="isUsing"/>
+        <collection property="compRelations" select="witstore.DAO.ProductDAO.getCompRelationsByProdId_Sept" column="prodId"/>
+    </resultMap>
+
+    <resultMap id="myCompRelation" type="witstore.domain.CompRelation">
+        <id column="prodId" property="prodId"/>
+        <id column="typeId" property="typeId"/>
+        <result column="demand" property="demand"/>
+        <result column="isUsing" property="isUsing"/>
+        <collection property="type" select="witstore.DAO.ProductDAO.getTypeByTypeId_Sept" column="typeId"/>
+    </resultMap>
+
+    <!--/////////////////////////////////////Insert//////////////////////////////////////-->
+    <!--添加产品-->
+    <insert id="insertProduct">
+        INSERT INTO product
+        (userId, prodName, prodPrice)
+        VALUES(#{userId},#{prodName},#{prodPrice})
+    </insert>
+
+    <!--添加产品组成-->
+    <insert id="insertCompRelation">
+        INSERT INTO comprelation
+        (prodId, typeId, demand)
+        VALUES(#{prodId},#{typeId},#{demand})
+    </insert>
+
+    <!--/////////////////////////////////////Delete//////////////////////////////////////-->
+    <!--删除产品-->
+    <update id="deleteProductByProdId">
+        UPDATE product SET isUsing=0 WHERE prodId=#{prodId}
+    </update>
+
+    <!--删除产品组成-->
+    <update id="deleteCompRelation">
+        UPDATE comprelation SET isUsing=0 WHERE compRelationId=#{compRelationId}
+    </update>
+
+    <update id="deleteCompRelationByProdId">
+        UPDATE comprelation SET isUsing=0 WHERE prodId=#{prodId}
+    </update>
+
+    <!--/////////////////////////////////////Update//////////////////////////////////////-->
+    <!--更新产品-->
+    <update id="updateProduct">
+        UPDATE product SET prodName=#{prodName},prodPrice=#{prodPrice} WHERE prodId=#{prodId}
+    </update>
+
+    <!--更新产品组成-->
+    <update id="updateCompRelation">
+        UPDATE comprelation SET demand=#{demand} WHERE compRelationId=#{compRelationId}
+    </update>
+
+    <!--/////////////////////////////////////Select//////////////////////////////////////-->
+    <!--查找产品详细信息-->
+    <select id="getProductByProdId" resultMap="myProduct">
+        SELECT * FROM product WHERE prodId=#{prodId} AND isUsing=1
+    </select>
+    <!--通过产品Id获取所有组成原材料类别(分步查询 getProductByProdId)-->
+    <select id="getCompRelationsByProdId_Sept" resultMap="myCompRelation">
+        SELECT * FROM comprelation WHERE prodId=#{prodId} AND isUsing=1
+    </select>
+    <select id="getTypeByTypeId_Sept" resultType="witstore.domain.Type">
+        SELECT * FROM typeinfo WHERE typeId=#{typeId} AND isUsing=1
+    </select>
+
+    <!--获取产品集合-->
+    <select id="getProductsByUserId" resultType="witstore.domain.Product">
+        SELECT * FROM product WHERE userId=#{userId} AND isUsing=1
+    </select>
+</mapper>

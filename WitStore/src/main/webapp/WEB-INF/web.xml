@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <!--配置SpringMVCServlet-->
+  <servlet>
+    <servlet-name>dispatcher</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>dispatcher</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+  <!--字符集处理-->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>witstore.Filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
+
+  <!--配置Spring的拦截器,可以使POST请求转换为DELETE,PUT请求-->
+  <!--<filter>-->
+  <!--<filter-name>HiddenHttpMethodFilter</filter-name>-->
+  <!--<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>-->
+  <!--</filter>-->
+  <!--<filter-mapping>-->
+  <!--<filter-name>HiddenHttpMethodFilter</filter-name>-->
+  <!--<url-pattern>/*</url-pattern>-->
+  <!--</filter-mapping>-->
+
+
+  <!-- sessionListener -->
+  <listener>
+    <listener-class>witstore.Tools.SessionListener</listener-class>
+  </listener>
+
+
+  <!--配置微信支付使用-->
+  <!--<display-name>Archetype Created Web Application</display-name>-->
+  <!--<servlet>-->
+    <!--<servlet-name>Xiadan</servlet-name>-->
+    <!--<display-name>Xiadan</display-name>-->
+    <!--<description></description>-->
+    <!--<servlet-class>com.weixinpay.Xiadan</servlet-class>-->
+  <!--</servlet>-->
+  <!--<servlet>-->
+    <!--<servlet-name>Sign</servlet-name>-->
+    <!--<display-name>Sign</display-name>-->
+    <!--<description></description>-->
+    <!--<servlet-class>com.weixinpay.Sign</servlet-class>-->
+  <!--</servlet>-->
+  <!--<servlet>-->
+    <!--<servlet-name>PayResult</servlet-name>-->
+    <!--<display-name>PayResult</display-name>-->
+    <!--<description></description>-->
+    <!--<servlet-class>com.weixinpay.PayResult</servlet-class>-->
+  <!--</servlet>-->
+  <!--<servlet>-->
+    <!--<servlet-name>GetOpenId</servlet-name>-->
+    <!--<display-name>GetOpenId</display-name>-->
+    <!--<description></description>-->
+    <!--<servlet-class>com.weixinpay.GetOpenId</servlet-class>-->
+  <!--</servlet>-->
+  <!--<servlet-mapping>-->
+    <!--<servlet-name>Xiadan</servlet-name>-->
+    <!--<url-pattern>/xiadan</url-pattern>-->
+  <!--</servlet-mapping>-->
+  <!--<servlet-mapping>-->
+    <!--<servlet-name>Sign</servlet-name>-->
+    <!--<url-pattern>/sign</url-pattern>-->
+  <!--</servlet-mapping>-->
+  <!--<servlet-mapping>-->
+    <!--<servlet-name>PayResult</servlet-name>-->
+    <!--<url-pattern>/PayResult</url-pattern>-->
+  <!--</servlet-mapping>-->
+  <!--<servlet-mapping>-->
+    <!--<servlet-name>GetOpenId</servlet-name>-->
+    <!--<url-pattern>/GetOpenId</url-pattern>-->
+  <!--</servlet-mapping>-->
+
+</web-app>

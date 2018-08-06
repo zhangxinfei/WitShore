@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="witstore.DAO.UserDAO">
+
+    <insert id="insertNewUser" parameterType="witstore.domain.User">
+        INSERT INTO users (userId,openId,nickName,gender,city,province,country,avatarUrl)
+        VALUE (#{userId},#{openId},#{nickName},#{gender},#{city},#{province},#{country},#{avatarUrl})
+    </insert>
+
+    <select id="getUserByOpenId" resultType="witstore.domain.User" parameterType="String">
+        SELECT * FROM users WHERE openId=#{openId}
+    </select>
+
+
+
+
+
+
+    <sql id="Base_Column_List" >
+    userId, openId, nickName, gender, city, province, country, avatarUrl
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+        select
+        <include refid="Base_Column_List" />
+        from users
+        where userId = #{userid,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from users
+    where userId = #{userid,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="witstore.domain.Users" >
+    insert into users (userId, openId, nickName,
+      gender, city, province,
+      country, avatarUrl)
+    values (#{userid,jdbcType=INTEGER}, #{openid,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR},
+      #{gender,jdbcType=INTEGER}, #{city,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR},
+      #{country,jdbcType=VARCHAR}, #{avatarurl,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="witstore.domain.Users" >
+        insert into users
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="userid != null" >
+                userId,
+            </if>
+            <if test="openid != null" >
+                openId,
+            </if>
+            <if test="nickname != null" >
+                nickName,
+            </if>
+            <if test="gender != null" >
+                gender,
+            </if>
+            <if test="city != null" >
+                city,
+            </if>
+            <if test="province != null" >
+                province,
+            </if>
+            <if test="country != null" >
+                country,
+            </if>
+            <if test="avatarurl != null" >
+                avatarUrl,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="userid != null" >
+                #{userid,jdbcType=INTEGER},
+            </if>
+            <if test="openid != null" >
+                #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null" >
+                #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="city != null" >
+                #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null" >
+                #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null" >
+                #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="avatarurl != null" >
+                #{avatarurl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="witstore.domain.Users" >
+        update users
+        <set >
+            <if test="openid != null" >
+                openId = #{openid,jdbcType=VARCHAR},
+            </if>
+            <if test="nickname != null" >
+                nickName = #{nickname,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null" >
+                gender = #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="city != null" >
+                city = #{city,jdbcType=VARCHAR},
+            </if>
+            <if test="province != null" >
+                province = #{province,jdbcType=VARCHAR},
+            </if>
+            <if test="country != null" >
+                country = #{country,jdbcType=VARCHAR},
+            </if>
+            <if test="avatarurl != null" >
+                avatarUrl = #{avatarurl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where userId = #{userid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="witstore.domain.Users" >
+    update users
+    set openId = #{openid,jdbcType=VARCHAR},
+      nickName = #{nickname,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      city = #{city,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      avatarUrl = #{avatarurl,jdbcType=VARCHAR}
+    where userId = #{userid,jdbcType=INTEGER}
+  </update>
+</mapper>
